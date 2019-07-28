@@ -1,0 +1,31 @@
+{
+    "name": "samirz/super",
+    "description": "Multi purpose laravel package",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohamed Samir",
+            "email": "gm.mohamedsamir@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Samirz\\Super\\": "src"
+        },
+        "files": [
+            "src/helpers/response.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Samirz\\Super\\Providers\\SuperServiceProvider"
+            ]
+        }
+    }
+}
