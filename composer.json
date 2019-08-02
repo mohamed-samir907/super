@@ -1,6 +1,6 @@
 {
     "name": "samirz/super",
-    "description": "Multi purpose laravel package",
+    "description": "Super CRUD laravel package",
     "type": "library",
     "license": "MIT",
     "authors": [

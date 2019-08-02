@@ -3,7 +3,7 @@
 namespace Samirz\Super\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Samirz\Super\Console\Commands\SamirzController;
+use Samirz\Super\Console\Commands\SamirzMakeController;
 use Samirz\Super\Console\Commands\SuperCrud;
 
 class SuperServiceProvider extends ServiceProvider
@@ -29,7 +29,7 @@ class SuperServiceProvider extends ServiceProvider
 
         $this->commands([
             SuperCrud::class,
-            SamirzController::class
+            SamirzMakeController::class
         ]);
     }
 

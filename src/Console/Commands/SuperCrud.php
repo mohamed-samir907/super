@@ -46,37 +46,37 @@ class SuperCrud extends Command
 
         $fillable = $this->ask('fillable', '');
 
-        if (! $this->check_exist(app_path("/Models/{$name}.php"), 'Model')) {
+        if (! $this->check_exist(app_path("/Models/{$name}.php"))) {
             $this->model($name, $fillable);
             $this->info("Model Created Successfully!");
         } else
             $this->error('Model is already exists');
 
-        if(! $this->check_exist(app_path("/Repositories/{$name}Repository.php"), 'Repository')) {
+        if(! $this->check_exist(app_path("/Repositories/{$name}Repository.php"))) {
             $this->repository($name);
             $this->info("Repository Created Successfully!");
         } else
             $this->error('Repository is already exists');
 
-        if(! $this->check_exist(app_path("/Services/{$name}Service.php"), 'Service')) {
+        if(! $this->check_exist(app_path("/Services/{$name}Service.php"))) {
             $this->service($name);
             $this->info("Service Created Successfully!");
         } else
             $this->error('Service is already exists');
 
-        if (! $this->check_exist(app_path("/Http/Requests/{$name}Request.php"), 'Request')) {
+        if (! $this->check_exist(app_path("/Http/Requests/{$name}Request.php"))) {
             $this->request($name, $fillable);
             $this->info("Request Created Successfully!");
         } else
         $this->error('Request is already exists');
 
-        if (! $this->check_exist(app_path("/Http/Controllers/{$name}Controller.php"), 'Controller')) {
+        if (! $this->check_exist(app_path("/Http/Controllers/{$name}Controller.php"))) {
             $this->controller($name);
             $this->info("Controller Created Successfully!");
         } else
             $this->error('Controller is already exists');
 
-        if (! $this->check_exist(app_path("/Models/{$name}.php"), 'Model')) {
+        if (! $this->check_exist(app_path("/Models/{$name}.php"))) {
             File::append(
                 base_path('routes/web.php'),
                 'Route::resource(\'' . str_plural(strtolower($name)) . "', '{$name}Controller');\n"
@@ -315,7 +315,7 @@ class SuperCrud extends Command
      * @param  string $type
      * @return void
      */
-    private function check_exist($path, $type)
+    private function check_exist($path)
     {
         if(!file_exists($path))
             return false;

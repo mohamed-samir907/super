@@ -4,7 +4,7 @@ namespace Samirz\Super\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class SamirzController extends Command
+class SamirzMakeController extends Command
 {
     /**
      * The name and signature of the console command.
@@ -55,24 +55,23 @@ class SamirzController extends Command
      */
     protected function getStub()
     {
-        $stub = __DIR__ . '/../Stubs/Controller.stub';
+        $stub = __DIR__ . '/../Stubs/Repository.stub';
 
         return file_get_contents($stub);
     }
 
     /**
-     * Make the controller class
+     * Make the repository class
      *
      * @param  string $name
      * @return void
      */
-    protected function controller($name)
+    protected function repository($name)
     {
         $space          = explode('/', $name);
         $className      = last($space);
-        $namespace      = 'App\Http\Controllers';
+        $namespace      = 'App\Repositories';
         $modelPath      = str_replace('/', '\\', $name);
-        $requestPath    = $modelPath . 'Request';
 
         if (count($space) > 1) {
             $namespace .= "\\" . str_replace('/', '\\', str_replace("/". $className, '', $name));
@@ -80,29 +79,23 @@ class SamirzController extends Command
 
         $direcotory = app_path(str_replace('App/', '', str_replace('\\', '/', $namespace)));
 
-        $controllerTemplate = str_replace(
+        $repositoryTemplate = str_replace(
             [
                 '{{DummyNamespace}}',
                 '{{modelPath}}',
-                '{{requestPath}}',
-                '{{modelName}}',
-                '{{modelNamePluralLowerCase}}',
-                '{{modelNameSingularLowerCase}}'
+                '{{modelName}}'
             ],
             [
                 $namespace,
                 $modelPath,
-                $requestPath,
-                $className,
-                strtolower(str_plural($className)),
-                strtolower($className)
+                $className
             ],
-            $this->getStub('Controller')
+            $this->getStub('Repository')
         );
 
         if(!file_exists($direcotory))
             mkdir($direcotory, 0777, true);
 
-        file_put_contents(app_path("/Http/Controllers/{$name}Controller.php"), $controllerTemplate);
+        file_put_contents(app_path("/Repositories/{$name}Repository.php"), $repositoryTemplate);
     }
 }
