@@ -1,0 +1,31 @@
+<?php
+
+namespace {{DummyNamespace}};
+
+use App\Models\{{modelPath}};
+use Samirz\Super\Http\Controllers\NormalController;
+use App\Http\Requests\{{requestPath}};
+
+class {{modelName}}Controller extends NormalController
+{
+    /**
+     * The Controller Constructor
+     *
+     * @return void
+     */
+    public function __construct({{modelName}} $model, {{modelName}}Request $request)
+    {
+        $this->model = $model;
+        $this->views = [
+            'index'     => '{{modelNamePluralLowerCase}}.index',
+            'create'    => '{{modelNamePluralLowerCase}}.create',
+            'show'      => '{{modelNamePluralLowerCase}}.show',
+            'edit'      => '{{modelNamePluralLowerCase}}.edit',
+            'trash'     => '{{modelNamePluralLowerCase}}.trash'
+        ];
+        $this->plural           = '{{modelNamePluralLowerCase}}';
+        $this->singular         = '{{modelNameSingularLowerCase}}';
+        $this->store_request    = $request;
+        $this->update_request   = $request;
+    }
+}

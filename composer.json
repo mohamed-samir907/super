@@ -18,7 +18,8 @@
             "Samirz\\Super\\": "src"
         },
         "files": [
-            "src/helpers/response.php"
+            "src/helpers/response.php",
+            "src/helpers/mix.php"
         ]
     },
     "extra": {

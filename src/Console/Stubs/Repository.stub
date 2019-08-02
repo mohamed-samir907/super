@@ -1,0 +1,14 @@
+<?php
+
+namespace {{DummyNamespace}};
+
+use App\Models\{{modelPath}};
+use Samirz\Super\Repositories\SamirzRepository;
+
+class {{modelName}}Repository extends SamirzRepository
+{
+    public function __construct({{modelName}} $model)
+    {
+        $this->model = $model;
+    }
+}

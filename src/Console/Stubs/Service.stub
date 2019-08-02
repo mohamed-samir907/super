@@ -1,0 +1,14 @@
+<?php
+
+namespace {{DummyNamespace}};
+
+use App\Repositories\{{modelName}}Repository;
+use Samirz\Super\Services\SamirzService;
+
+class {{modelName}}Service extends SamirzService
+{
+    public function __construct({{modelName}}Repository ${{modelNameSingularLowerCase}}Repository)
+    {
+        $this->repository = ${{modelNameSingularLowerCase}}Repository;
+    }
+}

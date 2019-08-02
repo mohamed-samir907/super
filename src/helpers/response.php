@@ -1,4 +1,5 @@
 <?php
+use Samirz\Super\Exceptions\CanNotAccessException;
 
 if (! function_exists('success_message')) {
 
@@ -8,11 +9,14 @@ if (! function_exists('success_message')) {
      * @param  mixed $data
      * @return void
      */
-    function success_message($data = '')
+    function success_message($message = '', $data = '')
     {
         return response()->json([
-            'message' => 'success',
-            'data' => $data
+            "data" => [
+                'message' => $message,
+                'type' => 'success',
+                'data' => $data
+            ]
         ], 200);
     }
 }
@@ -26,11 +30,14 @@ if (! function_exists('error_message')) {
      * @param  int $code
      * @return void
      */
-    function error_message($data = '', $code = 403)
+    function error_message($message = '', $code = 403, $data = '')
     {
         return response()->json([
-            'message' => 'success',
-            'data' => $data
+            "data" => [
+                'message' => $message,
+                'type' => 'error',
+                'data' => $data
+            ]
         ], $code);
     }
 }
@@ -44,8 +51,10 @@ if (! function_exists('can_not_access')) {
      */
     function can_not_access() {
         return response()->json([
-            'message' => 'Can not Access this Page',
-            'type' => 'error'
+            "data" => [
+                'message' => 'Can not Access this Page',
+                'type' => 'error'
+            ]
         ], 403);
     }
 }
@@ -58,11 +67,13 @@ if (! function_exists('create_success')) {
      * @param  mixed $data
      * @return \Response
      */
-    function create_success($data) {
+    function create_success($data = '') {
         return response()->json([
-            'message' => 'Record Created Successfully',
-            'type' => 'success',
-            'data' => $data
+            "data" => [
+                'message' => 'Record Created Successfully',
+                'type' => 'success',
+                'data' => $data
+            ]
         ], 200);
     }
 }
@@ -75,11 +86,13 @@ if (! function_exists('edit_success')) {
      * @param  mixed $data
      * @return \Response
      */
-    function edit_success($data) {
+    function edit_success($data = '') {
         return response()->json([
-            'message' => 'Record Edited Successfully',
-            'type' => 'success',
-            'data' => $data
+            "data" => [
+                'message' => 'Record Edited Successfully',
+                'type' => 'success',
+                'data' => $data
+            ]
         ], 200);
     }
 }
@@ -92,11 +105,13 @@ if (! function_exists('delete_success')) {
      * @param  mixed $data
      * @return \Response
      */
-    function delete_success($data) {
+    function delete_success($data = '') {
         return response()->json([
-            'message' => 'Record Deleted Successfully',
-            'type' => 'success',
-            'data' => $data
+            "data" => [
+                'message' => 'Record Deleted Successfully',
+                'type' => 'success',
+                'data' => $data
+            ]
         ], 200);
     }
 }
@@ -109,11 +124,95 @@ if (! function_exists('found_success')) {
      * @param  mixed $data
      * @return \Response
      */
-    function found_success($data) {
+    function found_success($data = '') {
         return response()->json([
-            'message' => 'Record Founded Successfully',
-            'type' => 'success',
-            'data' => $data
+            "data" => [
+                'message' => 'Record Founded Successfully',
+                'type' => 'success',
+                'data' => $data
+            ]
         ], 200);
+    }
+}
+
+if (! function_exists('restore_success')) {
+
+    /**
+     * Return restored successfully response
+     *
+     * @param  mixed $data
+     * @return \Response
+     */
+    function restore_success($data = '') {
+        return response()->json([
+            "data" => [
+                'message' => 'Record Restored Successfully',
+                'type' => 'success',
+                'data' => $data
+            ]
+        ], 200);
+    }
+}
+
+if (! function_exists('force_success')) {
+
+    /**
+     * Return force deleted successfully response
+     *
+     * @param  mixed $data
+     * @return \Response
+     */
+    function force_success($data = '') {
+        return response()->json([
+            "data" => [
+                'message' => 'Record Force Deleted Successfully',
+                'type' => 'success',
+                'data' => $data
+            ]
+        ], 200);
+    }
+}
+
+if (! function_exists('check_ajax')) {
+
+    /**
+     * Check if the request is ajax or not
+     *
+     * @return \Illuminate\Http\Response|null
+     */
+    function check_ajax() {
+        if (!request()->ajax()) {
+            throw new CanNotAccessException();
+        }
+    }
+}
+
+if (! function_exists('if_true_return_resource')) {
+
+    /**
+     * Check if the returned data is true then return new resource else return error message
+     *
+     * @param mixed $data
+     */
+    function if_true_return_resource($data, $resource) {
+        if ( $data )
+            return new $resource( $data );
+        else
+            return error_message('Record not found', 404);
+    }
+}
+
+if (! function_exists('if_true_return_message')) {
+
+    /**
+     * Check if the returned data is true then return new resource else return error message
+     *
+     * @param mixed $data
+     */
+    function if_true_return_message($data, $message) {
+        if ( $data )
+            return $message;
+        else
+            return error_message('Record not found', 404);
     }
 }

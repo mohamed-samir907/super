@@ -3,6 +3,8 @@
 namespace Samirz\Super\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Samirz\Super\Console\Commands\SamirzController;
+use Samirz\Super\Console\Commands\SuperCrud;
 
 class SuperServiceProvider extends ServiceProvider
 {
@@ -23,7 +25,12 @@ class SuperServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->registerHelpers();
+        $this->registerHelpers();
+
+        $this->commands([
+            SuperCrud::class,
+            SamirzController::class
+        ]);
     }
 
     /**
@@ -34,7 +41,8 @@ class SuperServiceProvider extends ServiceProvider
     public function registerHelpers()
     {
         $files = [
-            __DIR__ . '/../helpers/response.php'
+            __DIR__ . '/../helpers/response.php',
+            __DIR__ . '/../helpers/mix.php'
         ];
 
         foreach ($files as $file) {
