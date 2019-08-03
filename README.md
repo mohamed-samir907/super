@@ -1,5 +1,5 @@
 <p align="center">
-<img style="max-width: 150px;" src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ea/Superman_shield.svg/1200px-Superman_shield.svg.png">
+<img style="width: 150px;" src="https://upload.wikimedia.org/wikipedia/en/thumb/e/ea/Superman_shield.svg/1200px-Superman_shield.svg.png">
 </p>
 
 
