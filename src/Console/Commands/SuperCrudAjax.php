@@ -5,21 +5,21 @@ namespace Samirz\Super\Console\Commands;
 use File;
 use Illuminate\Console\Command;
 
-class SuperCrud extends Command
+class SuperCrudAjax extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'samirz:super-crud';
+    protected $signature = 'samirz:super-crud-ajax';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a super CRUD with service repository pattern';
+    protected $description = 'Create a super CRUD AJAX with service repository pattern';
 
     /**
      * Create a new command instance.
@@ -217,7 +217,7 @@ Route::resource('" . $pluralLowerCase . "', '{$name}Controller');\n"
                 strtolower(str_plural($className)),
                 strtolower($className)
             ],
-            $this->getStub('Controller')
+            $this->getStub('ControllerAjax')
         );
 
         if(!file_exists($direcotory))
@@ -361,9 +361,6 @@ Route::resource('" . $pluralLowerCase . "', '{$name}Controller');\n"
     {
         $views = [
             'index.blade',
-            'create.blade',
-            'show.blade',
-            'edit.blade',
             'trash.blade',
             'script/index.blade',
             'script/trash.blade'

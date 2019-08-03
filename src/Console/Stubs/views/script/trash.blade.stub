@@ -1,0 +1,67 @@
+<script>
+    $(document).on('click', '#btnForce', function() {
+        let id      = $(this).data('id');
+        let action  = "{{ url('/') }}/{{modelNamePluralLowerCase}}/force/"+id;
+
+        $.ajax({
+            url: action,
+            type: 'POST',
+            success: function(response) {
+                $('#tr-'+id).remove();
+
+                $('#custom-message').show();
+                $('#custom-message ul').empty();
+                $('#custom-message').addClass('custom-message-success');
+                $('#custom-message ul').append(`<li>${response.data.message}</li>`);
+            },
+            error: function(response) {
+                $('#custom-message').show();
+                $('#custom-message ul').empty();
+                $('#custom-message').addClass('custom-message-error');
+
+                $.each(response.responseJSON.errors, function(key, value) {
+                    if (Array.isArray(value)) {
+                        $.each(value, function(k, v) {
+                            $('#custom-message ul').append(`<li>${v}</li>`);
+                        });
+                    } else {
+                        $('#custom-message ul').append(`<li>${value}</li>`);
+                    }
+                });
+            }
+        })
+    });
+
+    $(document).on('click', '#btnRestore', function() {
+        let id      = $(this).data('id');
+        let action  = "{{ url('/') }}/{{modelNamePluralLowerCase}}/restore/"+id;
+
+        $.ajax({
+            url: action,
+            type: 'POST',
+            success: function(response) {
+                $('#tr-'+id).remove();
+
+                $('#custom-message').show();
+                $('#custom-message ul').empty();
+                $('#custom-message').addClass('custom-message-success');
+                $('#custom-message ul').append(`<li>${response.data.message}</li>`);
+            },
+            error: function(response) {
+                $('#custom-message').show();
+                $('#custom-message ul').empty();
+                $('#custom-message').addClass('custom-message-error');
+
+                $.each(response.responseJSON.errors, function(key, value) {
+                    if (Array.isArray(value)) {
+                        $.each(value, function(k, v) {
+                            $('#custom-message ul').append(`<li>${v}</li>`);
+                        });
+                    } else {
+                        $('#custom-message ul').append(`<li>${value}</li>`);
+                    }
+                });
+            }
+        })
+    });
+</script>

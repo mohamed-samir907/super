@@ -5,21 +5,21 @@ namespace Samirz\Super\Console\Commands;
 use File;
 use Illuminate\Console\Command;
 
-class SuperCrud extends Command
+class SuperCrudApi extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'samirz:super-crud';
+    protected $signature = 'samirz:super-crud-api';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a super CRUD with service repository pattern';
+    protected $description = 'Create a super CRUD API with service repository pattern';
 
     /**
      * Create a new command instance.
@@ -70,6 +70,12 @@ class SuperCrud extends Command
         } else
         $this->error('Request is already exists');
 
+        if (! $this->check_exist(app_path("/Http/Resources/{$name}Resource.php"))) {
+            $this->resource($name);
+            $this->info("Resource Created Successfully!");
+        } else
+        $this->error('Resource is already exists');
+
         if (! $this->check_exist(app_path("/Http/Controllers/{$name}Controller.php"))) {
             $this->controller($name);
             $this->info("Controller Created Successfully!");
@@ -77,8 +83,6 @@ class SuperCrud extends Command
             $this->error('Controller is already exists');
 
         if ($this->check_exist(app_path("/Models/{$name}.php"))) {
-            $this->views($name);
-            $this->info('Views created successfully!');
 
             $this->route($name);
             $this->info("Route resource Created Successfully!\n");
@@ -101,18 +105,6 @@ class SuperCrud extends Command
     }
 
     /**
-     * Get the stub file
-     *
-     * @return mixed
-     */
-    protected function getViewStub($name)
-    {
-        $stub = __DIR__ . '/../Stubs/views/'.$name.'.stub';
-
-        return file_get_contents($stub);
-    }
-
-    /**
      * Append the resource route to the route file
      *
      * @param  string $name
@@ -129,12 +121,12 @@ class SuperCrud extends Command
         $name = str_replace('/', '\\', $name);
 
         File::append(
-            base_path('routes/web.php'),
+            base_path('routes/api.php'),
 "
 Route::get('" . $pluralLowerCase . "/trash', '{$name}Controller@trash')->name('" . $pluralLowerCase . ".trash');
 Route::post('" . $pluralLowerCase . "/restore/{" . $lowerCase . "}', '{$name}Controller@restore')->name('" . $pluralLowerCase . ".restore');
 Route::post('" . $pluralLowerCase . "/force/{" . $lowerCase . "}', '{$name}Controller@force')->name('" . $pluralLowerCase . ".force');
-Route::resource('" . $pluralLowerCase . "', '{$name}Controller');\n"
+Route::apiResource('" . $pluralLowerCase . "', '{$name}Controller');\n"
         );
     }
 
@@ -217,7 +209,7 @@ Route::resource('" . $pluralLowerCase . "', '{$name}Controller');\n"
                 strtolower(str_plural($className)),
                 strtolower($className)
             ],
-            $this->getStub('Controller')
+            $this->getStub('ControllerApi')
         );
 
         if(!file_exists($direcotory))
@@ -351,94 +343,39 @@ Route::resource('" . $pluralLowerCase . "', '{$name}Controller');\n"
     }
 
     /**
-     * Create the views blade
+     * Make the resource class
      *
      * @param  string $name
-     * @param  bool $ajax
      * @return void
      */
-    protected function views($name)
+    protected function resource($name)
     {
-        $views = [
-            'index.blade',
-            'create.blade',
-            'show.blade',
-            'edit.blade',
-            'trash.blade',
-            'script/index.blade',
-            'script/trash.blade'
-        ];
+        $space          = explode('/', $name);
+        $className      = last($space);
+        $namespace      = 'App\Http\Resources';
 
-        $space = explode('/', $name);
-        $className = last($space);
-        $plural = strtolower(str_plural($className));
-
-        foreach($views as $view) {
-            $this->makeView($name, $view);
+        if (count($space) > 1) {
+            $namespace .= "\\" . str_replace('/', '\\', str_replace("/". $className, '', $name));
         }
 
-        File::append(
-            resource_path('views/samirz/layouts/sidebar.blade.php'),
-"
-<li class=\"{{ set_active('".$plural."', null) }}\">
-    <a href=\"{{ route('".$plural.".index') }}\">
-        <i class=\"nc-icon nc-tile-56\"></i>
-        <p>".ucfirst($plural)."</p>
-    </a>
-</li>
-<li class=\"{{ set_active('".$plural."', 'trash') }}\">
-    <a href=\"{{ route('".$plural.".trash') }}\">
-        <i class=\"nc-icon nc-bullet-list-67\"></i>
-        <p>Trashed ".ucfirst($plural)."</p>
-    </a>
-</li>
-<hr>
-"
-        );
-    }
+        $direcotory = app_path(str_replace('App/', '', str_replace('\\', '/', $namespace)));
 
-    /**
-     * Make the view file
-     *
-     * @param  string $name
-     * @param  string $view
-     * @return void
-     */
-    protected function makeView($name, $view)
-    {
-        $space      = explode('/', $name);
-        $className  = array_pop($space);
-        $namespace  = strtolower(implode('/', $space). '/' . str_plural($className));
-
-        $direcotory = resource_path('views/' . str_replace('\\', '/', $namespace));
-
-        if (strpos($view, 'script/') === 0) {
-            // $view = str_replace('script/', '', $view);
-            $direcotory .= '/script';
-        }
-
-        $stub = $this->getViewStub($view);
-
-        $viewTemplate = str_replace(
+        $resourceTemplate = str_replace(
             [
-                '{{modelName}}',
-                '{{modelNamePlural}}',
-                '{{modelNamePluralLowerCase}}',
-                '{{modelNameSingularLowerCase}}'
+                '{{DummyNamespace}}',
+                '{{modelName}}'
             ],
             [
-                $className,
-                str_plural($className),
-                strtolower(str_plural($className)),
-                strtolower($className)
+                $namespace,
+                $className
             ],
-            $stub
+            $this->getStub('Resource')
         );
 
         if(!file_exists($direcotory))
             mkdir($direcotory, 0777, true);
 
-        file_put_contents(str_replace('/script', '', $direcotory) . '/' .$view . ".php", $viewTemplate);
+        file_put_contents(app_path("/Http/Resources/{$name}Resource.php"), $resourceTemplate);
     }
 
     /**

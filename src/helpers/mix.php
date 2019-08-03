@@ -7,11 +7,17 @@ if (!function_exists('set_active')) {
      * Make the menu tag active if the request segment matches it
      *
      * @param  string $segment
+     * @param  int $part
      * @param  string $class
-     * @return void
+     * @return mixed
      */
-    function set_active($segment, $class = 'active')  {
-        return check_segment($segment, 2) ? $class : '';
+    function set_active($segment1, $segment2, $part = 2, $class = 'active')  {
+        if (check_segment($segment1, 1) && check_segment($segment2, 2))
+            return $class;
+        else
+            return '';
+
+        // return check_segment($segment, $part) ? $class : '';
     }
 
 }

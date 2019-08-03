@@ -1,0 +1,118 @@
+@extends('samirz.layouts.base')
+
+@section('content')
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="clearfix">
+                        <h4 class="card-title pull-left">{{modelNamePlural}} Table</h4>
+                        <button class="btn btn-primary pull-right" id="btnAdd">
+                            Add {{modelName}}
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class=" text-primary">
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Controls</th>
+                            </thead>
+                            <tbody id="tbody">
+                                @php $i = 1; @endphp
+
+                                @foreach (${{modelNamePluralLowerCase}} as ${{modelNameSingularLowerCase}})
+                                <tr id="tr-{{ ${{modelNameSingularLowerCase}}->id }}">
+                                    <td>{{ $i }}</td>
+                                    <td>{{ ${{modelNameSingularLowerCase}}->name }}</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-danger" href="#" id="btnDelete" data-id="{{ ${{modelNameSingularLowerCase}}->id }}">
+                                            <i class="nc-icon nc-simple-remove"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-success" href="#" id="btnEdit" data-id="{{ ${{modelNameSingularLowerCase}}->id }}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-info" href="#" id="btnInfo" data-id="{{ ${{modelNameSingularLowerCase}}->id }}">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @php $i++; @endphp
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <tfoot>
+                            <tr>
+                                <td class="pull-right">{{ ${{modelNamePluralLowerCase}}->links() }}</td>
+                            </tr>
+                        </tfoot>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel-1" style="margin-top: 0;">Add {{modelName}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: 0;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('{{modelNamePluralLowerCase}}.store') }}" method="POST" id="form{{modelName}}">
+                    @csrf
+                    <div id="update"></div>
+
+                    {{-- Inputes here --}}
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" id="name" class="form-control">
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel-1" style="margin-top: 0;">Show {{modelName}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: 0;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <td id="preview-name"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm waves-effect waves-light" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('script')
+@include('{{modelNamePluralLowerCase}}.script.index')
+@endpush

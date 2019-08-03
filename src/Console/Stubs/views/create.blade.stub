@@ -1,0 +1,31 @@
+@extends('samirz::layouts.base')
+
+@section('content')
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{{ route('{{modelNamePluralLowerCase}}.store') }}">
+                        @csrf
+
+                        <div class="form-group">
+                            <input type="text" name="name" id="name" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" value="Edit">
+                        </div>
+                    </form>
+
+                    @if (Session::has('success'))
+                        {{ Session::get('success') }}
+                    @endif
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@endsection

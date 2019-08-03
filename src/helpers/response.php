@@ -52,7 +52,7 @@ if (! function_exists('can_not_access')) {
     function can_not_access() {
         return response()->json([
             "data" => [
-                'message' => 'Can not Access this Page',
+                'message' => trans('samirz::response.can_not_access'),
                 'type' => 'error'
             ]
         ], 403);
@@ -70,7 +70,7 @@ if (! function_exists('create_success')) {
     function create_success($data = '') {
         return response()->json([
             "data" => [
-                'message' => 'Record Created Successfully',
+                'message' => trans('samirz::response.created_success'),
                 'type' => 'success',
                 'data' => $data
             ]
@@ -89,7 +89,7 @@ if (! function_exists('edit_success')) {
     function edit_success($data = '') {
         return response()->json([
             "data" => [
-                'message' => 'Record Edited Successfully',
+                'message' => trans('samirz::response.edited_success'),
                 'type' => 'success',
                 'data' => $data
             ]
@@ -108,7 +108,7 @@ if (! function_exists('delete_success')) {
     function delete_success($data = '') {
         return response()->json([
             "data" => [
-                'message' => 'Record Deleted Successfully',
+                'message' => trans('samirz::response.deleted_success'),
                 'type' => 'success',
                 'data' => $data
             ]
@@ -119,7 +119,7 @@ if (! function_exists('delete_success')) {
 if (! function_exists('found_success')) {
 
     /**
-     * Return founded successfully response
+     * Return found successfully response
      *
      * @param  mixed $data
      * @return \Response
@@ -127,7 +127,7 @@ if (! function_exists('found_success')) {
     function found_success($data = '') {
         return response()->json([
             "data" => [
-                'message' => 'Record Founded Successfully',
+                'message' => trans('samirz::response.found_success'),
                 'type' => 'success',
                 'data' => $data
             ]
@@ -146,7 +146,7 @@ if (! function_exists('restore_success')) {
     function restore_success($data = '') {
         return response()->json([
             "data" => [
-                'message' => 'Record Restored Successfully',
+                'message' => trans('samirz::response.restored_success'),
                 'type' => 'success',
                 'data' => $data
             ]
@@ -165,7 +165,7 @@ if (! function_exists('force_success')) {
     function force_success($data = '') {
         return response()->json([
             "data" => [
-                'message' => 'Record Force Deleted Successfully',
+                'message' => trans('samirz::response.force_success'),
                 'type' => 'success',
                 'data' => $data
             ]
@@ -198,7 +198,7 @@ if (! function_exists('if_true_return_resource')) {
         if ( $data )
             return new $resource( $data );
         else
-            return error_message('Record not found', 404);
+            return error_message(trans('samirz::response.not_found'), 404);
     }
 }
 
@@ -213,6 +213,6 @@ if (! function_exists('if_true_return_message')) {
         if ( $data )
             return $message;
         else
-            return error_message('Record not found', 404);
+            return error_message(trans('samirz::response.not_found'), 404);
     }
 }

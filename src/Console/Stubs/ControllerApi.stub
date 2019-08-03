@@ -4,6 +4,7 @@ namespace {{DummyNamespace}};
 
 use App\Services\{{servicePath}};
 use App\Http\Requests\{{requestPath}};
+use App\Http\Resources\{{resourcePath}};
 use Samirz\Super\Http\Controllers\NormalController;
 
 class {{modelName}}Controller extends NormalController
@@ -16,17 +17,10 @@ class {{modelName}}Controller extends NormalController
     public function __construct({{modelName}}Service $service)
     {
         $this->service          = $service;
+        $this->resource         = new {{modelName}}Resource($this->service->repository()->getModel());
         $this->plural           = '{{modelNamePluralLowerCase}}';
         $this->singular         = '{{modelNameSingularLowerCase}}';
         $this->store_request    = {{modelName}}Request::class;
         $this->update_request   = {{modelName}}Request::class;
-
-        $this->views = [
-            'index'     => '{{modelNamePluralLowerCase}}.index',
-            'create'    => '{{modelNamePluralLowerCase}}.create',
-            'show'      => '{{modelNamePluralLowerCase}}.show',
-            'edit'      => '{{modelNamePluralLowerCase}}.edit',
-            'trash'     => '{{modelNamePluralLowerCase}}.trash'
-        ];
     }
 }

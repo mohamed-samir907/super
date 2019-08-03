@@ -3,8 +3,10 @@
 namespace Samirz\Super\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Samirz\Super\Console\Commands\SamirzMakeController;
+use Samirz\Super\Console\Commands\SamirzMakeViews;
 use Samirz\Super\Console\Commands\SuperCrud;
+use Samirz\Super\Console\Commands\SuperCrudAjax;
+use Samirz\Super\Console\Commands\SuperCrudApi;
 
 class SuperServiceProvider extends ServiceProvider
 {
@@ -29,7 +31,16 @@ class SuperServiceProvider extends ServiceProvider
 
         $this->commands([
             SuperCrud::class,
-            SamirzMakeController::class
+            SuperCrudAjax::class,
+            SuperCrudApi::class,
+            SamirzMakeViews::class
+        ]);
+
+        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'samirz');
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'samirz');
+
+        $this->publishes([
+            __DIR__ . '/../../resources/views' => resource_path('views/samirz')
         ]);
     }
 

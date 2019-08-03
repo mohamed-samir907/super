@@ -1,0 +1,170 @@
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#btnAdd').on('click', function() {
+
+        if ($('#update').next().attr('name') == '_method') {
+            $('#update').next().remove();
+        }
+
+        $('#form{{modelName}}').attr('action', "{{ url('/') }}/{{modelNamePluralLowerCase}}");
+        $('#addModal').modal('show');
+    });
+
+    $(document).on('click', '#btnInfo', function() {
+        let id      = $(this).data('id');
+        let action  = "{{ url('/') }}/{{modelNamePluralLowerCase}}/"+id;
+
+        $.ajax({
+            url: action,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                let data = response.data.data;
+                let modal = $('#showModal');
+
+                modal.find('#preview-name').html(data.name);
+                modal.find('#preview-address').html(data.address);
+
+                modal.modal('show');
+            }
+        })
+    });
+
+    $('#form{{modelName}}').on('submit', function(e) {
+        e.preventDefault();
+
+        let form        = $(this);
+        let url         = form.attr('action');
+        let method      = $('#update input').val();
+        let data        = form.serialize();
+        var rows        = $('#table tbody tr').length;
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            success: function(response) {
+                if (response.data.message == 'Record Created Successfully') {
+                    $('#tbody').append(`<tr id="tr-${response.data.data.id}">
+                                    <td>${++rows}</td>
+                                    <td>${response.data.data.name}</td>
+
+                                    <td>
+                                        <a class="btn btn-sm btn-danger" href="#" id="btnDelete" data-id="${response.data.data.id}">
+                                            <i class="nc-icon nc-simple-remove"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-success" href="#" id="btnEdit" data-id="${response.data.data.id}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-info" href="#" id="btnInfo" data-id="${response.data.data.id}">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>`);
+                } else {
+                    var num = $(`#tr-${response.data.data.id}`).children('td').html();
+
+                    $(`#tr-${response.data.data.id}`).replaceWith(`<tr id="tr-${response.data.data.id}">
+                                    <td>${num}</td>
+                                    <td>${response.data.data.name}</td>
+
+                                    <td>
+                                        <a class="btn btn-sm btn-danger" href="#" id="btnDelete" data-id="${response.data.data.id}">
+                                            <i class="nc-icon nc-simple-remove"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-success" href="#" id="btnEdit" data-id="${response.data.data.id}">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-info" href="#" id="btnInfo" data-id="${response.data.data.id}">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>`);
+                }
+
+                $('#addModal').modal('hide');
+
+                $('#form{{modelName}}').find('#name').val('');
+
+                $('#form{{modelName}}').trigger("reset");
+            },
+            error: function(response) {
+                //
+            }
+        });
+    });
+
+    $(document).on('click', '#btnEdit', function() {
+        let form    = $('#form{{modelName}}');
+        let id      = $(this).data('id');
+        let action  = "{{ url('/') }}/{{modelNamePluralLowerCase}}/"+id;
+
+        $.ajax({
+            url: action + '/edit',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.data.type === 'success') {
+
+                    let data = response.data.data;
+
+                    form.attr('action', action);
+
+                    form.find('#name').val(data.name);
+                    form.find('#address').val(data.address);
+
+                    if (form.find('#update').next().attr('name') != '_method') {
+                        form.find('#update').after('{{ method_field('PUT') }}');
+                    }
+
+                    $('#addModal').modal('show');
+                }
+            }
+        })
+    });
+
+    $(document).on('click', '#btnDelete', function() {
+        let id      = $(this).data('id');
+        let action  = "{{ url('/') }}/{{modelNamePluralLowerCase}}/"+id;
+
+        $.ajax({
+            url: action,
+            type: 'POST',
+            data: {
+                '_method': 'DELETE'
+            },
+            success: function(response) {
+                if (response.data.message === 'Record Deleted Successfully') {
+
+                    $('#tr-'+id).remove();
+
+                    $('#custom-message').show();
+                    $('#custom-message ul').empty();
+                    $('#custom-message').addClass('custom-message-success');
+                    $('#custom-message ul').append(`<li>${response.data.message}</li>`);
+                }
+            },
+            error: function(response) {
+                $('#custom-message').show();
+                $('#custom-message ul').empty();
+                $('#custom-message').addClass('custom-message-error');
+
+                $.each(response.responseJSON.errors, function(key, value) {
+                    if (Array.isArray(value)) {
+                        $.each(value, function(k, v) {
+                            $('#custom-message ul').append(`<li>${v}</li>`);
+                        });
+                    } else {
+                        $('#custom-message ul').append(`<li>${value}</li>`);
+                    }
+                });
+            }
+        })
+    });
+</script>

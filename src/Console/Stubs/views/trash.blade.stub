@@ -1,0 +1,56 @@
+@extends('samirz.layouts.base')
+
+@section('content')
+<div class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Trashed {{modelNamePlural}} Table</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class=" text-primary">
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Controls</th>
+                            </thead>
+                            <tbody id="tbody">
+                                @php $i = 1; @endphp
+
+                                @foreach (${{modelNamePluralLowerCase}} as ${{modelNameSingularLowerCase}})
+                                <tr id="tr-{{ ${{modelNameSingularLowerCase}}->id }}">
+                                    <td>{{ $i }}</td>
+                                    <td>{{ ${{modelNameSingularLowerCase}}->name }}</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-danger" href="#" id="btnForce" data-id="{{ ${{modelNameSingularLowerCase}}->id }}">
+                                            <i class="nc-icon nc-simple-remove"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-success" href="#" id="btnRestore" data-id="{{ ${{modelNameSingularLowerCase}}->id }}">
+                                            <i class="fa fa-undo"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @php $i++; @endphp
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <tfoot>
+                            <tr>
+                                <td class="pull-right">{{ ${{modelNamePluralLowerCase}}->links() }}</td>
+                            </tr>
+                        </tfoot>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@endsection
+
+@push('script')
+@include('{{modelNamePluralLowerCase}}.script.trash')
+@endpush
