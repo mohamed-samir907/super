@@ -41,7 +41,11 @@ class SuperServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../../resources/views' => resource_path('views/samirz')
-        ]);
+        ], 'views');
+
+        $this->publishes([
+            __DIR__ . '/../../assets' => public_path('')
+        ], 'views');
     }
 
     /**
