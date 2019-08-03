@@ -8,7 +8,7 @@
 This package allows you to make a CRUD in a one command
 
 ## video Tutorial
-[https://youtube.com](https://youtube.com)
+[https://youtu.be/DamY-oKw9kE](https://youtu.be/DamY-oKw9kE)
 
 ## Installation
 
